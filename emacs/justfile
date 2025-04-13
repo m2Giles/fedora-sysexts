@@ -1,6 +1,7 @@
 name := "emacs"
 packages := "emacs"
 dnf_weak_deps := "false"
+enable_repos := "updates"
 base_images := "
 ghcr.io/m2giles/m2os:aurora
 ghcr.io/m2giles/m2os:aurora-nvidia
