@@ -291,9 +291,14 @@ setup-rootfs target arch=arch:
         --security-opt label=disable \
         "{{target}}" \
         bash -c 'source /etc/os-release ; echo -n ${VERSION_ID}')
+    id=$(podman run --rm -ti \
+        --arch={{arch}} \
+        --security-opt label=disable \
+        "{{target}}" \
+        bash -c 'source /etc/os-release ; echo -n ${ID}')
     ${SUDO} install -d -m0755 usr/lib/extension-release.d
     {
-    echo "ID=\"fedora\""
+    echo "ID=\"${id}\""
     echo "VERSION_ID=\"${version_id}\""
     # Post process architecture to match systemd architecture list
     arch="$(echo {{arch}} | sed 's/_/-/g')"
