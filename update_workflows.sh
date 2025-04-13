@@ -19,52 +19,52 @@ main() {
     rm "./.github/workflows/sysexts"*".yml"
 
     generate \
-        'quay.io/fedora/fedora-coreos' \
-        'stable' \
+        'ghcr.io/m2giles/m2os' \
+        'aurora' \
         'x86_64' \
-        'Fedora CoreOS'
+        'M2OS Aurora'
 
     generate \
-        'quay.io/fedora/fedora-coreos' \
-        'stable' \
-        'aarch64' \
-        'Fedora CoreOS'
-
-    generate \
-        'quay.io/fedora/fedora-coreos' \
-        'next' \
+        'ghcr.io/m2giles/m2os' \
+        'aurora-nvidia' \
         'x86_64' \
-        'Fedora CoreOS'
+        'M2OS Aurora Nvidia'
 
     generate \
-        'quay.io/fedora/fedora-coreos' \
-        'next' \
-        'aarch64' \
-        'Fedora CoreOS'
-
-    generate \
-        'quay.io/fedora-ostree-desktops/silverblue' \
-        '41' \
+        'ghcr.io/m2giles/m2os' \
+        'bluefin' \
         'x86_64' \
-        'Fedora Silverblue'
+        'M2OS Bluefin'
 
     generate \
-        'quay.io/fedora-ostree-desktops/silverblue' \
-        '42' \
+        'ghcr.io/m2giles/m2os' \
+        'bluefin-nvidia' \
         'x86_64' \
-        'Fedora Silverblue'
+        'M2OS Bluefin Nvidia'
 
     generate \
-        'quay.io/fedora-ostree-desktops/kinoite' \
-        '41' \
+        'ghcr.io/m2giles/m2os' \
+        'cosmic' \
         'x86_64' \
-        'Fedora Kinoite'
+        'M2OS Cosmic'
 
     generate \
-        'quay.io/fedora-ostree-desktops/kinoite' \
-        '42' \
+        'ghcr.io/m2giles/m2os' \
+        'cosmic-nvidia' \
         'x86_64' \
-        'Fedora Kinoite'
+        'M2OS Cosmic Nvidia'
+
+    generate \
+        'ghcr.io/m2giles/m2os' \
+        'bazzite' \
+        'x86_64' \
+        'M2OS Bazzite'
+
+    generate \
+        'ghcr.io/m2giles/m2os' \
+        'bazzite-deck' \
+        'x86_64' \
+        'M2OS Bazzite Deck'
 }
 
 generate() {
@@ -116,11 +116,11 @@ generate() {
         echo ""
     done
     cat "${tmpl}/sysexts_footer"
-    } > ".github/workflows/sysexts-${shortname}-${release}-${arch}.yml"
+    } > ".github/workflows/sysexts-${release}-${arch}.yml"
 
     # Fix GitHub runner for aarch64
     if [[ "${arch}" == "aarch64" ]]; then
-        sed -i "s/ubuntu-24.04/ubuntu-24.04-arm/" ".github/workflows/sysexts-${shortname}-${release}-${arch}.yml"
+        sed -i "s/ubuntu-24.04/ubuntu-24.04-arm/" ".github/workflows/sysexts-${release}-${arch}.yml"
     fi
 
     # Skip container builds for now as we are not using them yet.

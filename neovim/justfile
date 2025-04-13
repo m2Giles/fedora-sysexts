@@ -5,12 +5,14 @@ tree-sitter-cli
 "
 dnf_weak_deps := "false"
 base_images := "
-quay.io/fedora/fedora-coreos:stable x86_64,aarch64
-quay.io/fedora/fedora-coreos:next x86_64,aarch64
-quay.io/fedora-ostree-desktops/silverblue:41
-quay.io/fedora-ostree-desktops/silverblue:42
-quay.io/fedora-ostree-desktops/kinoite:41
-quay.io/fedora-ostree-desktops/kinoite:42
+ghcr.io/m2giles/m2os:aurora
+ghcr.io/m2giles/m2os:aurora-nvidia
+ghcr.io/m2giles/m2os:bazzite
+ghcr.io/m2giles/m2os:bazzite-deck
+ghcr.io/m2giles/m2os:bluefin
+ghcr.io/m2giles/m2os:bluefin-nvidia
+ghcr.io/m2giles/m2os:cosmic
+ghcr.io/m2giles/m2os:cosmic-nvidia
 "
 
 import '../sysext.just'
