@@ -22,49 +22,49 @@ main() {
         'ghcr.io/m2giles/m2os' \
         'aurora' \
         'x86_64' \
-        'M2OS Aurora'
+        'M2OS'
 
     generate \
         'ghcr.io/m2giles/m2os' \
         'aurora-nvidia' \
         'x86_64' \
-        'M2OS Aurora Nvidia'
+        'M2OS'
 
     generate \
         'ghcr.io/m2giles/m2os' \
         'bluefin' \
         'x86_64' \
-        'M2OS Bluefin'
+        'M2OS'
 
     generate \
         'ghcr.io/m2giles/m2os' \
         'bluefin-nvidia' \
         'x86_64' \
-        'M2OS Bluefin Nvidia'
+        'M2OS'
 
     generate \
         'ghcr.io/m2giles/m2os' \
         'cosmic' \
         'x86_64' \
-        'M2OS Cosmic'
+        'M2OS'
 
     generate \
         'ghcr.io/m2giles/m2os' \
         'cosmic-nvidia' \
         'x86_64' \
-        'M2OS Cosmic Nvidia'
+        'M2OS'
 
     generate \
         'ghcr.io/m2giles/m2os' \
         'bazzite' \
         'x86_64' \
-        'M2OS Bazzite'
+        'M2OS'
 
     generate \
         'ghcr.io/m2giles/m2os' \
         'bazzite-deck' \
         'x86_64' \
-        'M2OS Bazzite Deck'
+        'M2OS'
 }
 
 generate() {

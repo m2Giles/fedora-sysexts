@@ -1,10 +1,10 @@
-name: "Build sysexts: M2OS Cosmic (cosmic, x86_64)"
+name: "Build sysexts: M2OS (cosmic, x86_64)"
 
 env:
   IMAGE: 'ghcr.io/m2giles/m2os:cosmic'
   RELEASE: 'cosmic'
-  NAME: 'M2OS Cosmic'
-  SHORTNAME: 'm2os-cosmic'
+  NAME: 'M2OS'
+  SHORTNAME: 'm2os'
   GH_TOKEN: ${{ github.token }}
   PR: ${{ github.event_name == 'pull_request' }}
   ARCH: 'x86_64'
@@ -171,7 +171,7 @@ jobs:
           for s in $(ls *.raw); do
               s="${s%-*-x86-64.raw}"
               s="${s%-*-aarch64.raw}"
-              sed "s/%%SYSEXT%%/${s}/g" ../.workflow-templates/systemd-sysupdate.conf > ${s}.conf
+              sed "s/%%SYSEXT%%/${s}/g, s/%%IMAGE%%/${RELEASE}/g" ../.workflow-templates/systemd-sysupdate.conf > ${s}.conf
               if [[ "${SHORTNAME}" == "fedora-coreos" ]]; then
                   sed -i "s/%w/stable${arch}/" ${s}.conf
               fi
@@ -185,7 +185,7 @@ jobs:
 
           # Only mark the FCOS x86_64 tag as latest release
           latest=false
-          if [[ "${SHORTNAME}" == "fedora-coreos" ]] && [[ "${ARCH}" == "x86_64" ]] && [[ "${RELEASE}" == "stable"  ]]; then
+          if [[ "${SHORTNAME}" == "m2os-bluefin" ]] && [[ "${ARCH}" == "x86_64" ]]; then
             latest="true"
           fi
 
