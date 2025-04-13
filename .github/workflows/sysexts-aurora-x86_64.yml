@@ -17,7 +17,7 @@ on:
     branches:
       - main
   schedule:
-    - cron:  '0 0 * * MON'
+    - cron:  '45 8 * * 0' # 8:45 Sunday
   workflow_dispatch:
 
 # Needed to allow creating a release
