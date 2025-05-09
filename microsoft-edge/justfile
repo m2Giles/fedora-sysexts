@@ -9,6 +9,14 @@ ghcr.io/m2giles/m2os:bluefin
 ghcr.io/m2giles/m2os:bluefin-nvidia
 ghcr.io/m2giles/m2os:cosmic
 ghcr.io/m2giles/m2os:cosmic-nvidia
+ghcr.io/m2giles/m2os:aurora-beta
+ghcr.io/m2giles/m2os:aurora-nvidia-beta
+ghcr.io/m2giles/m2os:bazzite-beta
+ghcr.io/m2giles/m2os:bazzite-deck-beta
+ghcr.io/m2giles/m2os:bluefin-beta
+ghcr.io/m2giles/m2os:bluefin-nvidia-beta
+ghcr.io/m2giles/m2os:cosmic-beta
+ghcr.io/m2giles/m2os:cosmic-nvidia-beta
 "
 pre_commands := "rm -rf /opt; mkdir /opt; rpm --import https://packages.microsoft.com/keys/microsoft.asc; echo -e '[edge-yum]\nname=edge-yum\nbaseurl=https://packages.microsoft.com/yumrepos/edge/\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc' | tee /etc/yum.repos.d/edge.repo > /dev/null"
 

@@ -11,6 +11,14 @@ ghcr.io/m2giles/m2os:bluefin
 ghcr.io/m2giles/m2os:bluefin-nvidia
 ghcr.io/m2giles/m2os:cosmic
 ghcr.io/m2giles/m2os:cosmic-nvidia
+ghcr.io/m2giles/m2os:aurora-beta
+ghcr.io/m2giles/m2os:aurora-nvidia-beta
+ghcr.io/m2giles/m2os:bazzite-beta
+ghcr.io/m2giles/m2os:bazzite-deck-beta
+ghcr.io/m2giles/m2os:bluefin-beta
+ghcr.io/m2giles/m2os:bluefin-nvidia-beta
+ghcr.io/m2giles/m2os:cosmic-beta
+ghcr.io/m2giles/m2os:cosmic-nvidia-beta
 "
 
 import '../sysext.just'

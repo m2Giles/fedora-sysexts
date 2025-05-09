@@ -65,6 +65,54 @@ main() {
         'bazzite-deck' \
         'x86_64' \
         'M2OS'
+
+    generate \
+        'ghcr.io/m2giles/m2os' \
+        'aurora-beta' \
+        'x86_64' \
+        'M2OS'
+
+    generate \
+        'ghcr.io/m2giles/m2os' \
+        'aurora-nvidia-beta' \
+        'x86_64' \
+        'M2OS'
+
+    generate \
+        'ghcr.io/m2giles/m2os' \
+        'bluefin-beta' \
+        'x86_64' \
+        'M2OS'
+
+    generate \
+        'ghcr.io/m2giles/m2os' \
+        'bluefin-nvidia-beta' \
+        'x86_64' \
+        'M2OS'
+
+    generate \
+        'ghcr.io/m2giles/m2os' \
+        'cosmic-beta' \
+        'x86_64' \
+        'M2OS'
+
+    generate \
+        'ghcr.io/m2giles/m2os' \
+        'cosmic-nvidia-beta' \
+        'x86_64' \
+        'M2OS'
+
+    generate \
+        'ghcr.io/m2giles/m2os' \
+        'bazzite-beta' \
+        'x86_64' \
+        'M2OS'
+
+    generate \
+        'ghcr.io/m2giles/m2os' \
+        'bazzite-deck-beta' \
+        'x86_64' \
+        'M2OS'
 }
 
 generate() {

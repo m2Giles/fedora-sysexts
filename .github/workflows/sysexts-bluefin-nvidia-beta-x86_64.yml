@@ -1,0 +1,182 @@
+name: "Build sysexts: M2OS (bluefin-nvidia-beta, x86_64)"
+
+env:
+  IMAGE: 'ghcr.io/m2giles/m2os:bluefin-nvidia-beta'
+  RELEASE: 'bluefin-nvidia-beta'
+  NAME: 'M2OS'
+  SHORTNAME: 'm2os'
+  GH_TOKEN: ${{ github.token }}
+  PR: ${{ github.event_name == 'pull_request' }}
+  ARCH: 'x86_64'
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  schedule:
+    - cron:  '45 8 * * 0' # 8:45 Sunday
+  workflow_dispatch:
+
+# Needed to allow creating a release
+permissions:
+  contents: write
+
+# Prevent multiple workflow runs from racing to ensure that pushes are made
+# sequentialy for the main branch. Also cancel in progress workflow runs.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.sysext }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: "ubuntu-24.04"
+    container:
+      image: "quay.io/fedora/fedora:41"
+      options: "--privileged --security-opt label=disable --user 0:0"
+    steps:
+      - name: "Install tools"
+        run: |
+          dnf install -y \
+            cpio \
+            dnf5-plugins \
+            erofs-utils \
+            git \
+            jq \
+            just \
+            podman \
+            wget
+          dnf config-manager addrepo --from-repofile="https://cli.github.com/packages/rpm/gh-cli.repo"
+          dnf install -y gh --repo gh-cli
+
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+
+      - name: "Setup artifacts and dnf cache directories"
+        run: |
+          mkdir -p artifacts .dnf-cache
+
+      - name: "Mark directory as safe"
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+
+      - name: "Build sysext: emacs"
+        env:
+          SYSEXT: emacs
+        run: |
+          cd "${SYSEXT}"
+          if [[ "${PR}" == "true" ]]; then
+              diff="$(git diff origin/main HEAD --stat -- . ; git diff origin/main HEAD --stat -- ../sysext.just)"
+              if [[ -z "${diff}" ]]; then
+                  echo "Skipping: No changes for this sysext in this PR"
+                  exit 0
+              fi
+          fi
+          just build ${IMAGE} ${ARCH}
+          mv "${SYSEXT}"*".raw" "../artifacts/"
+
+      - name: "Build sysext: google-chrome"
+        env:
+          SYSEXT: google-chrome
+        run: |
+          cd "${SYSEXT}"
+          if [[ "${PR}" == "true" ]]; then
+              diff="$(git diff origin/main HEAD --stat -- . ; git diff origin/main HEAD --stat -- ../sysext.just)"
+              if [[ -z "${diff}" ]]; then
+                  echo "Skipping: No changes for this sysext in this PR"
+                  exit 0
+              fi
+          fi
+          just build ${IMAGE} ${ARCH}
+          mv "${SYSEXT}"*".raw" "../artifacts/"
+
+      - name: "Build sysext: microsoft-edge"
+        env:
+          SYSEXT: microsoft-edge
+        run: |
+          cd "${SYSEXT}"
+          if [[ "${PR}" == "true" ]]; then
+              diff="$(git diff origin/main HEAD --stat -- . ; git diff origin/main HEAD --stat -- ../sysext.just)"
+              if [[ -z "${diff}" ]]; then
+                  echo "Skipping: No changes for this sysext in this PR"
+                  exit 0
+              fi
+          fi
+          just build ${IMAGE} ${ARCH}
+          mv "${SYSEXT}"*".raw" "../artifacts/"
+
+      - name: "Build sysext: neovim"
+        env:
+          SYSEXT: neovim
+        run: |
+          cd "${SYSEXT}"
+          if [[ "${PR}" == "true" ]]; then
+              diff="$(git diff origin/main HEAD --stat -- . ; git diff origin/main HEAD --stat -- ../sysext.just)"
+              if [[ -z "${diff}" ]]; then
+                  echo "Skipping: No changes for this sysext in this PR"
+                  exit 0
+              fi
+          fi
+          just build ${IMAGE} ${ARCH}
+          mv "${SYSEXT}"*".raw" "../artifacts/"
+
+      - name: "Build sysext: vscode"
+        env:
+          SYSEXT: vscode
+        run: |
+          cd "${SYSEXT}"
+          if [[ "${PR}" == "true" ]]; then
+              diff="$(git diff origin/main HEAD --stat -- . ; git diff origin/main HEAD --stat -- ../sysext.just)"
+              if [[ -z "${diff}" ]]; then
+                  echo "Skipping: No changes for this sysext in this PR"
+                  exit 0
+              fi
+          fi
+          just build ${IMAGE} ${ARCH}
+          mv "${SYSEXT}"*".raw" "../artifacts/"
+
+      - name: Create a release with a SHA256SUMS manifest and systemd-sysupdate configs
+        if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+        run: |
+          git config --global --add safe.directory "${PWD}"
+
+          cd ./artifacts
+
+          sha256sum *.raw > SHA256SUMS
+
+          arch=""
+          if [[ "${ARCH}" != "x86_64" ]]; then
+              arch="-${ARCH}"
+          fi
+
+          sysexts=()
+          for s in $(ls *.raw); do
+              s="${s%-*-x86-64.raw}"
+              s="${s%-*-aarch64.raw}"
+              sed "s/%%SYSEXT%%/${s}/g; s/%%IMAGE%%/${RELEASE}/g" ../.workflow-templates/systemd-sysupdate.conf > ${s}.conf
+              if [[ "${SHORTNAME}" == "fedora-coreos" ]]; then
+                  sed -i "s/%w/stable${arch}/" ${s}.conf
+              fi
+          done
+
+          gh release delete \
+            --cleanup-tag \
+            --yes \
+            "${SHORTNAME}-${RELEASE}${arch}" \
+            || true
+
+          # Only mark the FCOS x86_64 tag as latest release
+          latest=false
+          if [[ "${SHORTNAME}-${RELEASE}" == "m2os-bluefin" ]] && [[ "${ARCH}" == "x86_64" ]]; then
+            latest="true"
+          fi
+
+          gh release create \
+            --title "${NAME} ${RELEASE} sysexts (${ARCH})" \
+            --notes "System extensions for ${NAME} ${RELEASE} (${ARCH})" \
+            "${SHORTNAME}-${RELEASE}${arch}" \
+            --latest=${latest} \
+            ./*
