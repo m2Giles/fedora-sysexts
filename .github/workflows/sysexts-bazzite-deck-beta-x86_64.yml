@@ -47,6 +47,7 @@ jobs:
             jq \
             just \
             podman \
+            unzip \
             wget
           dnf config-manager addrepo --from-repofile="https://cli.github.com/packages/rpm/gh-cli.repo"
           dnf install -y gh --repo gh-cli
