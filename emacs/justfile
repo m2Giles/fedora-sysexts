@@ -1,5 +1,5 @@
 name := "emacs"
-packages := "emacs"
+packages := "emacs libvterm"
 dnf_weak_deps := "false"
 enable_repos := "updates"
 base_images := "

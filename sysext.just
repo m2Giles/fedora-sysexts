@@ -20,7 +20,7 @@ enable_repos := ""
 copr_repos := ""
 
 # Disable repos from the build container
-disable_repos := ""
+disable_repos := "'terra*'"
 
 # Do not enable any external repos by default
 external_repos := ""
