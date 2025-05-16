@@ -173,7 +173,6 @@ download-rpms target arch=arch:
     if [[ -n "{{disable_repos}}" ]]; then
         for r in {{disable_repos}}; do
             echo "➖ Disabling repo: ${r}"
-            {{ if target =~ "bazzite" { "disablerepos+=' --disablerepo=terra*'" } else { '' } }}
             disablerepos+=" --disablerepo=${r}"
         done
     fi
@@ -235,7 +234,7 @@ download-rpms target arch=arch:
         --workdir "/var/srv" \
         --security-opt label=disable \
         "{{target}}" \
-        bash -c "export FORCE_COLUMNS=100 && ${pre_commands}dnf download --resolve ${dnf_arch} ${dnf_opts} ${disablerepos} ${enablerepos} ${packages}"
+        bash -c "export FORCE_COLUMNS=100 && ${pre_commands}dnf download -y --resolve ${dnf_arch} ${dnf_opts} ${disablerepos} ${enablerepos} ${packages}"
 
 # Manual download step, that can be overridden to dowload non RPM content
 download-manual arch=arch:
