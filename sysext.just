@@ -173,7 +173,7 @@ download-rpms target arch=arch:
     if [[ -n "{{disable_repos}}" ]]; then
         for r in {{disable_repos}}; do
             echo "➖ Disabling repo: ${r}"
-            {{ if target =~ bazzite { "disablerepos+=' --disablerepo=terra*'" } else { '' } }}
+            {{ if target =~ "bazzite" { "disablerepos+=' --disablerepo=terra*'" } else { '' } }}
             disablerepos+=" --disablerepo=${r}"
         done
     fi
