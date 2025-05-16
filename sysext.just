@@ -20,7 +20,7 @@ enable_repos := ""
 copr_repos := ""
 
 # Disable repos from the build container
-disable_repos := "'terra*'"
+disable_repos := ""
 
 # Do not enable any external repos by default
 external_repos := ""
@@ -173,6 +173,7 @@ download-rpms target arch=arch:
     if [[ -n "{{disable_repos}}" ]]; then
         for r in {{disable_repos}}; do
             echo "➖ Disabling repo: ${r}"
+            {{ if target =~ bazzite { "disablerepos+=' --disablerepo=terra*'" } else { '' } }}
             disablerepos+=" --disablerepo=${r}"
         done
     fi
