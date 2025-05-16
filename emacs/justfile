@@ -37,6 +37,11 @@ install-manual:
     fi
 
     cd rootfs
+    while [[ -z "${EMACS_LSP_BOOSTER:-}" || "${EMACS_LSP_BOOSTER:-}" == "null" ]]; do
+        EMACS_LSP_BOOSTER="$(curl -L https://api.github.com/repos/blahgeek/emacs-lsp-booster/releases/latest | jq -r '.assets[] | select(.name| test(".*musl[.]zip$")).browser_download_url')" || (true && sleep 5)
+    done
+    curl --retry 3 -Lo /tmp/emacs-lsp-booster.zip "$EMACS_LSP_BOOSTER"
+    ${SUDO} unzip -d usr/bin/ /tmp/emacs-lsp-booster.zip
 
     EMACS_PATH="/usr/bin/emacs-pgtk"
     ETAGS_PATH="/usr/bin/emacs.etags"
