@@ -90,7 +90,7 @@ targets:
 check target arch=arch:
     #!/bin/bash
     set -euo pipefail
-    # set -x
+    set -x
 
     # Make sure that the sysext lists the base images that it supports
     if [[ -z "{{base_images}}" ]]; then
@@ -154,7 +154,7 @@ check target arch=arch:
 download-rpms target arch=arch:
     #!/bin/bash
     set -euo pipefail
-    # set -x
+    set -x
 
     # Skip this step if we have not been asked to download packages
     if [[ -z "{{packages}}" ]]; then
@@ -247,7 +247,7 @@ download-manual arch=arch:
 setup-rootfs target arch=arch:
     #!/bin/bash
     set -euo pipefail
-    # set -x
+    set -x
 
     if [[ "${UID}" == "0" ]]; then
         SUDO=""
@@ -313,7 +313,7 @@ setup-rootfs target arch=arch:
 install-rpms:
     #!/bin/bash
     set -euo pipefail
-    # set -x
+    set -x
 
     # Skip this step if we have not been asked to install packages
     if [[ -z "{{packages}}" ]]; then
@@ -329,10 +329,7 @@ install-rpms:
     cd rootfs
 
     echo "📦 Extracting packages:"
-    for rpm in ../rpms/*.rpm; do
-        echo "$(basename ${rpm})"
-        rpm2cpio "${rpm}" | ${SUDO} cpio -idmv &> /dev/null
-    done
+    ${SUDO} bash -c 'for rpm in ../rpms/*.rpm; do echo "$(basename ${rpm})"; rpm2cpio ${rpm} | cpio -idmv &> /dev/null; done'
 
 # Install files from the current directory. Uses:
 # - files: List of folders or files to copy to `rootfs`. Use either `usr` or
