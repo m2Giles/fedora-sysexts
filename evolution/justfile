@@ -1,5 +1,5 @@
 name := "evolution"
-packages := "evolution"
+packages := "evolution evolution-ews"
 base_images := "
 ghcr.io/m2giles/m2os:aurora
 ghcr.io/m2giles/m2os:aurora-nvidia
